@@ -1,0 +1,57 @@
+{
+  "team_id": "GravityFalls",
+  "cases": [
+    {
+      "case_id": "CAL-ALPHA",
+      "schema": "1.1",
+      "registry_fingerprint": "1001",
+      "oracle_fingerprint": "1001",
+      "compatibility_map": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "provenance": "factory-calibration"
+    },
+    {
+      "case_id": "CAL-BETA",
+      "schema": "1.1",
+      "registry_fingerprint": "0110",
+      "oracle_fingerprint": "0110",
+      "compatibility_map": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "provenance": "factory-calibration"
+    },
+    {
+      "case_id": "MIG-DELTA",
+      "schema": "legacy-0.9",
+      "registry_fingerprint": "1010",
+      "oracle_fingerprint": "1010",
+      "compatibility_map": [
+        1,
+        0,
+        2,
+        3
+      ],
+      "provenance": "migration-adapter"
+    },
+    {
+      "case_id": "INCIDENT-7",
+      "schema": "legacy-0.9",
+      "registry_fingerprint": "1100",
+      "oracle_fingerprint": "1100",
+      "compatibility_map": [
+        3,
+        1,
+        2,
+        0
+      ],
+      "provenance": "external-import"
+    }
+  ]
+}

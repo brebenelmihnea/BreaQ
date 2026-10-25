@@ -1,0 +1,95 @@
+{
+  "team_id": "GravityFalls",
+  "challenge": "01-trust-no-input",
+  "security_claim": "An attacker who can edit only the untrusted compatibility_map in an imported manifest can force a MATCH or MISMATCH result against any registry fingerprint with the same number of 1-bits, without changing the circuit, backend or registry, because the adapter compares the registry value with a reordered copy of the result instead of the measured q\u2080\u2026q\u2083 fingerprint.",
+  "root_cause_layer": "",
+  "minimal_reproducer": {
+    "fingerprint": "1010",
+    "runs": {
+      "identity": {
+        "counts": {
+          "0101": 512
+        },
+        "canonical_fingerprint": "1010",
+        "reported_fingerprint": "1010"
+      },
+      "legacy_swap": {
+        "counts": {
+          "0101": 512
+        },
+        "canonical_fingerprint": "1010",
+        "reported_fingerprint": "0110"
+      }
+    },
+    "same_canonical": true,
+    "different_report": true
+  },
+  "defense_results": {
+    "implemented": false,
+    "passed": 0,
+    "failed": 0
+  },
+  "attack_demo": {
+    "1010 -> 0110": {
+      "compatibility_map": [
+        1,
+        0,
+        2,
+        3
+      ],
+      "reported": "0110",
+      "success": true
+    },
+    "1010 -> 1100": {
+      "compatibility_map": [
+        0,
+        2,
+        1,
+        3
+      ],
+      "reported": "1100",
+      "success": true
+    },
+    "1010 -> 1110": {
+      "compatibility_map": null,
+      "reported": null,
+      "success": false
+    },
+    "1000 -> 0000": {
+      "compatibility_map": null,
+      "reported": null,
+      "success": false
+    }
+  },
+  "claims": [
+    {
+      "claim": "The fault is not quantum noise; it is caused by application-layer interpretation of the result.",
+      "evidence": "Phase B circuit inspection and Phase C controlled experiment showing whether the same encoded fingerprint produces different reports under different compatibility metadata.",
+      "assumption": "The local simulator is ideal and the encoded circuit is unchanged between the compared runs.",
+      "limitation": "This conclusion applies to the tested local challenge cases; it does not rule out noise on real quantum hardware."
+    },
+    {
+      "claim": "The circuit encodes the registry fingerprint, but the raw Qiskit count key must be converted to canonical logical-slot order before comparison.",
+      "evidence": "Compare the registry fingerprint, dominant raw count key, reversed canonical key, and reported fingerprint in the Phase A evidence table and Phase B circuit inspection.",
+      "assumption": "Qubit i represents logical slot i, as specified by the challenge contract.",
+      "limitation": "A matching bit order alone does not prove that every possible circuit or measurement mapping is correct."
+    },
+    {
+      "claim": "Compatibility metadata can alter the reported fingerprint and potentially affect the MATCH/MISMATCH decision.",
+      "evidence": "Phase C minimal reproducer: hold the encoded fingerprint fixed, vary only the compatibility metadata, and compare the resulting reports and decisions.",
+      "assumption": "The two experiments differ only in the compatibility metadata being tested.",
+      "limitation": "The demonstrated effect depends on the adapter's behavior and the tested metadata configurations."
+    },
+    {
+      "claim": "The mitigation generalizes because it decodes raw measurement counts into canonical order and compares that result with the registry, independently of compatibility metadata.",
+      "evidence": "Phase D positive and negative tests, including fingerprints not present in team_instance.json and tests using different bit patterns.",
+      "assumption": "The measurement mapping and canonical logical-slot order are trusted and explicitly defined.",
+      "limitation": "The decoder must also validate malformed counts, ties, invalid fingerprints, and any assumptions about shot distributions before being used in production."
+    }
+  ],
+  "team_member_contributions": [
+    "Pascu Mihai-Daniel",
+    "Oprea Rares-Mihai",
+    "Brebenel Mihnea-Stefan"
+  ]
+}
